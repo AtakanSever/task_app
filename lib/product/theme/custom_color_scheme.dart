@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+
+/// Project custom colors
+final class CustomColorScheme {
+  CustomColorScheme._();
+
+  /// Light color scheme set
+  static const lightColorScheme = ColorScheme(
+    brightness: Brightness.light,
+    primary: Color.fromRGBO(83, 177, 117, 1),
+    onPrimary: Color(0xFFDAD6F9),
+    primaryContainer: Color.fromRGBO(0, 179, 111, 1),
+    onPrimaryContainer: Color.fromRGBO(61, 55, 106, 1),
+    secondary: Color(0xFF4DACF6),
+    onSecondary: Color(0xFFC8E5FC),
+    secondaryContainer: Color(0xFF3E8AC5),
+    onSecondaryContainer: Color(0xFFC8E5FC),
+    tertiary: Color(0xFF24EBDD),
+    onTertiary: Color(0xFFBBF9F4),
+    tertiaryContainer: Color(0xFF1DBCB1),
+    onTertiaryContainer: Color.fromRGBO(187, 249, 244, 1),
+    error: Color.fromRGBO(255, 44, 32, 1),
+    onError: Color(0xFFFFFFFF),
+    errorContainer: Color(0xFFF9DEDC),
+    onErrorContainer: Color(0xFF410E0B),
+    outline: Color(0xFF79747E),
+    background: Color(0xFFFFFBFE),
+    onBackground: Color(0xFF131314),
+    surface: Color.fromRGBO(235, 238, 242, 1),
+    onSurface: Color(0xFF1C1B1F),
+    surfaceVariant: Color.fromRGBO(188, 190, 194, 1),
+    onSurfaceVariant: Color.fromRGBO(245, 247, 249, 1),
+    inverseSurface: Color(0xFF20D4C7),
+    onInverseSurface: Color(0xFFF4EFF4),
+    inversePrimary: Color(0xFF459BDD),
+    shadow: Color(0xFF000000),
+    surfaceTint: Color.fromRGBO(252, 252, 253, 1),
+    outlineVariant: Color(0xFFEBEEF2),
+    scrim: Color.fromRGBO(27, 60, 86, 1),
+  );
+
+  /// Light dark scheme set
+  static const darkColorScheme = ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color.fromRGBO(101, 92, 177, 1),
+    onPrimary: Color.fromRGBO(81, 74, 142, 1),
+    primaryContainer: Color.fromRGBO(61, 55, 106, 1),
+    onPrimaryContainer: Color.fromRGBO(61, 55, 106, 1),
+    secondary: Color.fromRGBO(58, 129, 185, 1),
+    onSecondary: Color.fromRGBO(46, 103, 148, 1),
+    secondaryContainer: Color.fromRGBO(35, 77, 111, 1),
+    onSecondaryContainer: Color.fromRGBO(27, 60, 86, 1),
+    tertiary: Color.fromRGBO(27, 176, 166, 1),
+    onTertiary: Color.fromRGBO(22, 141, 133, 1),
+    tertiaryContainer: Color.fromRGBO(16, 106, 99, 1),
+    onTertiaryContainer: Color.fromRGBO(13, 82, 77, 1),
+    error: Color.fromRGBO(255, 44, 32, 1),
+    onError: Color(0xFF601410),
+    errorContainer: Color(0xFF8C1D18),
+    onErrorContainer: Color(0xFFF9DEDC),
+    outline: Color(0xFF938F99),
+    background: Color(0xFF1C1B1F),
+    onBackground: Color(0xFFE6E1E5),
+    surface: Color(0xFF525355),
+    onSurface: Color(0xFFF6F8F9),
+    surfaceVariant: Color(0xFFFCFDFD),
+    onSurfaceVariant: Color(0xFFF5F7F9),
+    inverseSurface: Color(0xFF20D4C7),
+    onInverseSurface: Color(0xFFF4EFF4),
+    inversePrimary: Color(0xFF459BDD),
+    shadow: Color(0xFF000000),
+    surfaceTint: Color(0xFF7A6FD4),
+    outlineVariant: Color(0xFFEBEEF2),
+    scrim: Color.fromARGB(255, 246, 249, 255),
+  );
+}

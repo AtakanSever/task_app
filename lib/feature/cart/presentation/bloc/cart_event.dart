@@ -33,3 +33,10 @@ class DecrementCartProductPiece extends CartEvent {
   @override
   List<Object?> get props => [cartItem];
 }
+
+class ClearAllCart extends CartEvent {
+  final List<CartItem> cartList;
+  ClearAllCart({required this.cartList});
+  @override
+  List<Object?> get props => [cartList];
+}

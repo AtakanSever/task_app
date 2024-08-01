@@ -12,6 +12,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<DeleteItem>(_onDeleteItem);
     on<IncrementCartProductPiece>(_onIncrementProductPiece);
     on<DecrementCartProductPiece>(_onDecrementProductPiece);
+    on<ClearAllCart>(_onClearAllCart);
   }
 
   Future<void> _onAddToCartMeal(AddToCartMeal event, Emitter<CartState> emit) async {
@@ -56,6 +57,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await localStorage.updateItem(item: updatedItem);
       final updatedItems = await localStorage.getAllItems();
       emit(state.copyWith(allItems: updatedItems));
+    }
+  }
+
+  Future<void> _onClearAllCart(ClearAllCart event, Emitter<CartState> emit) async {
+    final LocalStorage localStorage = HiveLocalStorage();
+    emit(state.copyWith(isLoading: true, hasError: false));
+    try {
+      for(var item in event.cartList) {
+        await localStorage.deleteItem(item: item);
+      }
+      final updatedItems = await localStorage.getAllItems();
+      emit(state.copyWith(isLoading: false, allItems: updatedItems));
+    } catch (_) {
+      emit(state.copyWith(isLoading: false, hasError: true));
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_app/feature/account/presentation/view/account_page.dart';
+import 'package:task_app/feature/cart/presentation/subview/success_checkout_page.dart';
 import 'package:task_app/feature/cart/presentation/view/cart_page.dart';
 import 'package:task_app/feature/favorites/presentation/view/favorites_page.dart';
 import 'package:task_app/feature/home/presentation/view/home_page.dart';
@@ -72,6 +73,13 @@ final class AppRouter {
         path: '/search_with_name_page',
         builder: (context, state) {
           return SearchWithNamePage(
+          );
+        },
+      ),
+      GoRoute(
+        path: '/success_checkout_page',
+        builder: (context, state) {
+          return SuccessCheckoutPage(
           );
         },
       ),

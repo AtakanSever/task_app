@@ -24,7 +24,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     emit(state.copyWith(isLoading: true, hasError: false));
     try {
       await localStorage.addItem(favoritesItem: event.favoritesItem);
-      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(isLoading: false, isFavorite: {event.favoritesItem.id : true}));
     } catch (_) {
       emit(state.copyWith(isLoading: false, hasError: true));
     }
@@ -37,7 +37,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     try {
       await localStorage.deleteItem(favoritesItem: event.favoritesItem);
       final updatedItems = await localStorage.getAllItems();
-      emit(state.copyWith(isLoading: false, allItems: updatedItems));
+      emit(state.copyWith(isLoading: false, allItems: updatedItems, isFavorite: {event.favoritesItem.id : true}));
     } catch (_) {
       emit(state.copyWith(isLoading: false, hasError: true));
     }

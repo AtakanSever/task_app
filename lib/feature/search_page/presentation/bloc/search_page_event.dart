@@ -30,3 +30,26 @@ class GetSearchWithName extends SearchPageEvent {
   @override
   List<Object> get props => [mealName];
 }
+
+class AddFilteredCategory extends SearchPageEvent {
+  String category;
+  AddFilteredCategory({required this.category});
+  @override
+  List<Object> get props => [category];
+}
+
+class RemoveFilteredCategory extends SearchPageEvent {
+  final String category;
+
+  const RemoveFilteredCategory({required this.category});
+
+  @override
+  List<Object> get props => [category];
+}
+
+class GetFilteredCategoriesMeals extends SearchPageEvent {
+  const GetFilteredCategoriesMeals();
+
+  @override
+  List<Object> get props => [];
+}

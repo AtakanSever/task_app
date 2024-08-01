@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_app/feature/cart/data/cart_item.dart';
 import 'package:task_app/feature/cart/presentation/bloc/cart_bloc.dart';
 import 'package:task_app/feature/product_detail/presentation%20/bloc/product_detail_bloc.dart';
@@ -63,7 +64,8 @@ class _CartPageState extends State<CartPage> {
                       context.theme.colorScheme.onBackground.withOpacity(0.3),
                 ),
                 _allItems.isEmpty
-                    ? const Center(child: Text('You have not add to cart a meal yet'))
+                    ? const Center(
+                        child: Text('You have not add to cart a meal yet'))
                     : Expanded(
                         child: ListView.builder(
                           itemCount: _allItems.length,
@@ -204,7 +206,7 @@ class _CartPageState extends State<CartPage> {
                           },
                         ),
                       ),
-                      VerticalSpace.large()
+                VerticalSpace.large()
               ],
             ),
             Positioned(
@@ -212,7 +214,95 @@ class _CartPageState extends State<CartPage> {
               left: 20,
               right: 20,
               child: CustomGeneralButtonWidget(
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: context.height > 900 ? context.height / 1.8 : context.height / 1.4,
+                          decoration: BoxDecoration(
+                            color: context.theme.colorScheme.background,
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(24)),
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: context.paddingAllDefault,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Checkout',
+                                      style: context.textTheme.titleSmall,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/icons/cancel_icon.svg',
+                                      color: context
+                                          .theme.colorScheme.onBackground,
+                                      height: 18,
+                                      width: 18,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                color: context.theme.colorScheme.onBackground
+                                    .withOpacity(0.5),
+                                thickness: 0.3,
+                              ),
+                              Padding(
+                                padding: context.paddingHorizontalDefault,
+                                child: Column(
+                                  children: [
+                                    CheckoutInfoWidget(
+                                        title: 'Delivery',
+                                        widget: Text(
+                                          'Select Method',
+                                          style: context.textTheme.bodySmall,
+                                        )),
+                                    CheckoutInfoWidget(
+                                        title: 'Payment',
+                                        widget: SvgPicture.asset(
+                                            'assets/icons/payment_card_icon.svg')),
+                                    CheckoutInfoWidget(
+                                        title: 'Promo Code',
+                                        widget: Text(
+                                          'Pick Discount',
+                                          style: context.textTheme.bodySmall,
+                                        )),
+                                    CheckoutInfoWidget(
+                                        title: 'Total Cost',
+                                        widget: Text(
+                                          "₺13.97",
+                                          style: context.textTheme.bodySmall,
+                                        )),
+                                    VerticalSpace.small(),
+                                    Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'By placing an order you agree to our\nTerms And Conditions',
+                                          style: context.textTheme.labelMedium
+                                              ?.copyWith(
+                                                  color: context.theme
+                                                      .colorScheme.onBackground
+                                                      .withOpacity(0.5)),
+                                        )),
+                                        VerticalSpace.medium(),
+                                        CustomGeneralButtonWidget(onTap: () {
+                                          context.read<CartBloc>().add(ClearAllCart(cartList: _allItems));
+                                          context.push('/success_checkout_page');
+                                        }, text: 'Place Order', width: context.width / 1.1, height: context.dynamicHeight(0.07), borderRadius: 19,)
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                },
                 width: context.width / 2,
                 text: 'Go To Checkout',
                 height: context.dynamicHeight(0.075),
@@ -222,6 +312,51 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CheckoutInfoWidget extends StatelessWidget {
+  final String title;
+  final Widget widget;
+  const CheckoutInfoWidget({
+    required this.title,
+    required this.widget,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        VerticalSpace.xSmall(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: context.textTheme.bodyMedium?.copyWith(
+                  color:
+                      context.theme.colorScheme.onBackground.withOpacity(0.5)),
+            ),
+            Row(
+              children: [
+                widget,
+                HorizontalSpace.xSmall(),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                )
+              ],
+            )
+          ],
+        ),
+        VerticalSpace.xxSmall(),
+        Divider(
+          color: context.theme.colorScheme.onBackground.withOpacity(0.5),
+          thickness: 0.3,
+        ),
+      ],
     );
   }
 }

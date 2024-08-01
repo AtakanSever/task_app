@@ -20,3 +20,14 @@ class AddToCart extends ProductDetailEvent {
   @override
   List<Object> get props => [cartItem];
 }
+
+class GiveRating extends ProductDetailEvent {
+  final String mealId;
+  final int stars;
+
+  GiveRating({required this.mealId, required this.stars});
+
+  @override
+  List<Object> get props => [mealId, stars];
+}
+

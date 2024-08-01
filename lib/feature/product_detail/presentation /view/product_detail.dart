@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:task_app/feature/cart/data/cart_item.dart';
 import 'package:task_app/feature/favorites/data/favourites_item.dart';
 import 'package:task_app/feature/favorites/presentation/bloc/favorites_bloc.dart';
@@ -53,7 +54,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         padding: context.paddingHorizontalDefault,
                         child: const Divider(),
                       ),
-                      const ProductAnotherInfo(),
+                      ProductAnotherInfo(
+                        meal: meal,
+                      ),
                       VerticalSpace.large(),
                       VerticalSpace.large()
                     ],
@@ -69,8 +72,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         imageUrl: meal.strMealThumb,
                         name: meal.strMeal,
                         weight: meal.strMeasure1 ?? 'N/A',
-                        price:
-                            4.99, 
+                        price: 4.99,
                         amount: context
                             .read<ProductDetailBloc>()
                             .state
@@ -96,9 +98,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 }
 
 class ProductAnotherInfo extends StatelessWidget {
-  const ProductAnotherInfo({
-    super.key,
-  });
+  final Meal meal;
+  const ProductAnotherInfo({super.key, required this.meal});
 
   @override
   Widget build(BuildContext context) {
@@ -142,22 +143,43 @@ class ProductAnotherInfo extends StatelessWidget {
             children: [
               Text('Review', style: context.textTheme.bodyLarge),
               const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return const Icon(
-                    Icons.star,
-                    color: Colors.deepOrange,
-                    size: 26,
+              BlocBuilder<ProductDetailBloc, ProductDetailState>(
+                builder: (context, state) {
+                  final int rating = state.ratings[meal.idMeal] ?? 0;
+                  return Row(
+                    children: List.generate(5, (index) {
+                      return InkWell(
+                        splashColor: Colors.transparent,
+                        onTap: () {
+                          context.read<ProductDetailBloc>().add(GiveRating(
+                                mealId: meal.idMeal,
+                                stars: index + 1,
+                              ));
+                        },
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) {
+                            return ScaleTransition(
+                                child: child, scale: animation);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/icons/star_ic.svg',
+                            color: index < rating
+                                ? Colors.deepOrange
+                                : Colors.grey,
+                            width: 25,
+                            height: 25,
+                            key: ValueKey<int>(index < rating ? 1 : 0),
+                          ),
+                        ),
+                      );
+                    }),
                   );
-                }),
+                },
               ),
-              const Row(
-                children: [
-                  HorizontalSpace.xSmall(),
-                  Icon(Icons.arrow_forward_ios),
-                ],
-              ),
+              const HorizontalSpace.xSmall(),
+              const Icon(Icons.arrow_forward_ios),
             ],
           ),
         ],
@@ -167,10 +189,7 @@ class ProductAnotherInfo extends StatelessWidget {
 }
 
 class ProductInfoWidget extends StatelessWidget {
-  const ProductInfoWidget({
-    super.key,
-    required this.meal,
-  });
+  const ProductInfoWidget({super.key, required this.meal});
 
   final Meal meal;
 
@@ -203,42 +222,42 @@ class ProductInfoWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(onPressed: () {
-                    final favoritesItem = FavoritesItem.create(
+                  IconButton(
+                    onPressed: () {
+                      final favoritesItem = FavoritesItem.create(
                         imageUrl: meal.strMealThumb,
                         name: meal.strMeal,
                         weight: meal.strMeasure1 ?? 'N/A',
-                        price:
-                            4.99, 
+                        price: 4.99,
                         amount: context
                             .read<ProductDetailBloc>()
                             .state
                             .productPiece,
                       );
-                    context.read<FavoritesBloc>().add(AddToFavoritesMeal(favoritesItem: favoritesItem));
-                    print('basıldıı');
-                  }, icon: Icon(
-                    Icons.favorite_border,
-                    size: 28,
-                    color:
-                        context.theme.colorScheme.onBackground.withOpacity(0.5),
-                  ),)
+                      context.read<FavoritesBloc>().add(
+                          AddToFavoritesMeal(favoritesItem: favoritesItem));
+                    },
+                    icon: Icon(
+                      Icons.favorite_border,
+                      size: 28,
+                      color: context.theme.colorScheme.onBackground
+                          .withOpacity(0.5),
+                    ),
+                  ),
                 ],
               ),
               const VerticalSpace.small(),
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.remove,
-                      size: 30,
-                    ),
+                    icon: const Icon(Icons.remove, size: 30),
                     onPressed: () {
                       context
                           .read<ProductDetailBloc>()
                           .add(DecrementProductPiece());
                     },
-                    color: Colors.grey,
+                    color:
+                        context.theme.colorScheme.onBackground.withOpacity(0.4),
                   ),
                   Container(
                     padding: context.paddingHorizontalDefault +
@@ -253,25 +272,20 @@ class ProductInfoWidget extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(
-                      Icons.add,
-                      size: 30,
-                    ),
+                    icon: const Icon(Icons.add, size: 30),
                     onPressed: () {
                       context
                           .read<ProductDetailBloc>()
                           .add(IncrementProductPiece());
                     },
-                    color: Colors.green,
+                    color: context.theme.colorScheme.primary,
                   ),
                   const Spacer(),
                   Text('\$1.99', style: context.textTheme.headlineMedium),
                 ],
               ),
               const VerticalSpace.small(),
-              const Divider(
-                thickness: 2,
-              ),
+              const Divider(thickness: 2),
             ],
           );
         },
@@ -307,10 +321,7 @@ class _ProductDetailExpansionState extends State<ProductDetailExpansion> {
             },
             child: Row(
               children: [
-                Text(
-                  'Product Detail',
-                  style: context.textTheme.bodyLarge,
-                ),
+                Text('Product Detail', style: context.textTheme.bodyLarge),
                 const Spacer(),
                 Icon(
                   _isExpanded
@@ -342,10 +353,7 @@ class _ProductDetailExpansionState extends State<ProductDetailExpansion> {
 }
 
 class ProductImage extends StatelessWidget {
-  const ProductImage({
-    super.key,
-    required this.meal,
-  });
+  const ProductImage({super.key, required this.meal});
 
   final Meal meal;
 
@@ -372,18 +380,12 @@ class ProductImage extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 25,
-                  ),
+                  icon: const Icon(Icons.arrow_back_ios, size: 25),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 const Spacer(),
                 IconButton(
-                  icon: const Icon(
-                    Icons.share,
-                    size: 25,
-                  ),
+                  icon: const Icon(Icons.share, size: 25),
                   onPressed: () {},
                 ),
               ],

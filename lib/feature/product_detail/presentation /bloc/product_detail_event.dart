@@ -13,14 +13,6 @@ class IncrementProductPiece extends ProductDetailEvent {}
 
 class DecrementProductPiece extends ProductDetailEvent {}
 
-class AddToCart extends ProductDetailEvent {
-  final CartItem cartItem;
-  const AddToCart({required this.cartItem});
-
-  @override
-  List<Object> get props => [cartItem];
-}
-
 class GiveRating extends ProductDetailEvent {
   final String mealId;
   final int stars;
@@ -29,5 +21,13 @@ class GiveRating extends ProductDetailEvent {
 
   @override
   List<Object> get props => [mealId, stars];
+}
+
+class IsFavorite extends ProductDetailEvent {
+  final String mealId;
+  IsFavorite({required this.mealId});
+
+  @override
+  List<Object> get props => [mealId];
 }
 

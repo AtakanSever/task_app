@@ -2,53 +2,25 @@ import 'package:dio/dio.dart';
 import 'package:task_app/feature/home/data/models/meals.dart';
 import 'package:task_app/feature/search_page/data/categories.dart';
 import 'package:task_app/feature/search_page/data/category_of_meals.dart';
+import 'package:task_app/product/network/network_manager.dart';
+import 'package:task_app/product/utility/enums/service_path.dart';
 
 class SearchPageServices {
-  final Dio _dio = Dio();
+  Dio _dio = Dio();
 
   Future<CategoryList> getCategories() async {
-    try {
-      final response =
-          await _dio.get('https://www.themealdb.com/api/json/v1/1/categories.php');
-
-      if (response.statusCode == 200) {
-        return CategoryList.fromJson(response.data as Map<String, dynamic>);
-      } else {
-        throw Exception('Meals could not be brought ');
-      }
-    } catch (e) {
-      throw Exception('Meals could not be brought: $e');
-    }
+    return await NetworkManager.instance.dioGet<CategoryList>(
+        ServicePath.getCategories.value, CategoryList(categories: []));
   }
 
   Future<CategoryOfMealsList> getCategoryOfMeals(String category) async {
-    try {
-      final response =
-          await _dio.get('https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}');
-
-      if (response.statusCode == 200) {
-        return CategoryOfMealsList.fromJson(response.data as Map<String, dynamic>);
-      } else {
-        throw Exception('Meals could not be brought with category');
-      }
-    } catch (e) {
-      throw Exception('Meals could not be brought with category: $e');
-    }
+    return await NetworkManager.instance.dioGet<CategoryOfMealsList>(
+        '${ServicePath.getCategoryOfMeals.value}$category',
+        CategoryOfMealsList(meals: []));
   }
 
   Future<MealsResponse> getSearchWithName(String mealName) async {
-    try {
-      final response =
-          await _dio.get('https://www.themealdb.com/api/json/v1/1/search.php?s=${mealName}');
-
-      if (response.statusCode == 200) {
-        return MealsResponse.fromJson(response.data as Map<String, dynamic>);
-      } else {
-        throw Exception('Meals could not be brought with mealName');
-      }
-    } catch (e) {
-      throw Exception('Meals could not be brought with mealName: $e');
-    }
+    return await NetworkManager.instance
+        .dioGet('${ServicePath.searchWithName.value}$mealName', MealsResponse(meals: []));
   }
 }
-

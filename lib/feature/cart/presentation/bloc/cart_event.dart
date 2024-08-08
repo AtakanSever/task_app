@@ -5,7 +5,13 @@ abstract class CartEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AddToCartMeal extends CartEvent {}
+class AddToCart extends CartEvent {
+  final CartItem cartItem;
+  AddToCart({required this.cartItem});
+
+  @override
+  List<Object> get props => [cartItem];
+}
 
 class DeleteItem extends CartEvent {
   final CartItem cartItem;
@@ -39,4 +45,7 @@ class ClearAllCart extends CartEvent {
   ClearAllCart({required this.cartList});
   @override
   List<Object?> get props => [cartList];
+}
+
+class GetTotalPrice extends CartEvent {
 }

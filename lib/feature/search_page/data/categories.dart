@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:task_app/product/network/base/base_model.dart';
 
 part 'categories.g.dart';
 
 @JsonSerializable()
-class Category {
+class Category extends BaseModel {
   @JsonKey(name: 'idCategory')
   final String idCategory;
 
@@ -24,22 +25,41 @@ class Category {
   });
 
   // JSON'dan Category nesnesine dönüştürme
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
 
   // Category nesnesinden JSON'a dönüştürme
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
+
+  @override
+  Category fromJson(Map<String, dynamic> json) {
+    return Category.fromJson(json);
+  }
 }
 
 @JsonSerializable()
-class CategoryList {
-  @JsonKey(name: 'categories')
+class CategoryList extends BaseModel {
   final List<Category> categories;
 
   CategoryList({required this.categories});
 
-  // JSON'dan CategoryList nesnesine dönüştürme
-  factory CategoryList.fromJson(Map<String, dynamic> json) => _$CategoryListFromJson(json);
+  factory CategoryList.fromJson(Map<String, dynamic> json) {
+    return CategoryList(
+      categories: (json['categories'] as List)
+          .map((i) => Category.fromJson(i))
+          .toList(),
+    );
+  }
 
-  // CategoryList nesnesinden JSON'a dönüştürme
-  Map<String, dynamic> toJson() => _$CategoryListToJson(this);
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'categories': categories.map((e) => e.toJson()).toList(),
+    };
+  }
+  
+  @override
+  CategoryList fromJson(Map<String, dynamic> json) {
+    return CategoryList.fromJson(json);
+  }
 }

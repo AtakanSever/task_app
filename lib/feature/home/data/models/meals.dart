@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_app/product/core/t_types/meal_t_model.dart';
+import 'package:task_app/product/network/base/base_model.dart';
 
 part 'meals.g.dart';
 
 @JsonSerializable()
-class Meal extends MealItem {
+class Meal extends MealItem implements BaseModel<Meal> {
   final String idMeal;
   final String strMeal;
   final String? strDrinkAlternate;
@@ -117,16 +118,28 @@ class Meal extends MealItem {
 
   factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MealToJson(this);
+
+  @override
+  Meal fromJson(Map<String, dynamic> json) {
+    return Meal.fromJson(json);
+  }
 }
 
 @JsonSerializable()
-class MealsResponse {
+class MealsResponse implements BaseModel<MealsResponse> {
   final List<Meal> meals;
 
   MealsResponse({required this.meals});
 
   factory MealsResponse.fromJson(Map<String, dynamic> json) => _$MealsResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MealsResponseToJson(this);
+
+  @override
+  MealsResponse fromJson(Map<String, dynamic> json) {
+    return MealsResponse.fromJson(json);
+  }
 }

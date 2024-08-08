@@ -29,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(isLoading: true, hasError: false));
     try {
       final response = await mealService.getMealsOfArea();
-      emit(state.copyWith(mealsOfArea: response.meals, isLoading: false));
+      emit(state.copyWith(mealsOfArea: response?.meals ?? [] , isLoading: false));
     } catch (_) {
       emit(state.copyWith(isLoading: false, hasError: true));
     }

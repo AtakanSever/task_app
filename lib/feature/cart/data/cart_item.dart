@@ -33,6 +33,7 @@ class CartItem extends HiveObject {
   });
 
   factory CartItem.create({
+    required String id,
     required String imageUrl,
     required String name,
     required String weight,
@@ -40,7 +41,7 @@ class CartItem extends HiveObject {
     required int amount,
   }) {
     return CartItem(
-      id: const Uuid().v1(),
+      id: id,
       imageUrl: imageUrl,
       name: name,
       weight: weight,
